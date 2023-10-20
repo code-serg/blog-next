@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google';
 import { Container, SSRProvider } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
 import styles from '@/styles/App.module.css';
 
 const inter = Inter({ subsets: ['latin'] });
