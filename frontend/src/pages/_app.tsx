@@ -5,6 +5,7 @@ import { Container, SSRProvider } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/styles/globals.css';
+import styles from '@/styles/App.module.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,7 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <SSRProvider>
         <div className={inter.className}>
           <main>
-            <Container>
+            <Container className={styles.pageContainer}>
               <Component {...pageProps} />
             </Container>
           </main>

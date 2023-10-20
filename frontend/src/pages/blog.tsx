@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { Button } from 'react-bootstrap';
 
 export default function BlogPage() {
   return (
@@ -10,7 +11,16 @@ export default function BlogPage() {
           content="Full Stack Blog with MERN + Next.js"
         />
       </Head>
-      <div>Hello New Blog!</div>
+      <div>
+        <div>Hello New Blog!</div>
+        <div>
+          <Button>Click Here!</Button> HI{' '}
+        </div>
+        <div>
+          <a href="#">Follow the Link</a>
+        </div>
+        <div> Hello </div>
+      </div>
     </>
   );
 }
