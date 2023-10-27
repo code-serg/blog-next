@@ -12,3 +12,37 @@ export const getBlogPosts: RequestHandler = async (req, res, next) => {
     res.status(500).json({ error });
   }
 };
+
+interface BlogPostBody {
+  slug: string;
+  title: string;
+  summary: string;
+  body: string;
+}
+
+// RequestHandler type parameters:
+// 1. Params: URL parameters type. Set to `unknown` since we aren't expecting any specific parameters.
+// 2. ResBody: Response body type. Set to `unknown` as the response structure isn't explicitly typed.
+// 3. ReqBody: Request body type. It's of type `BlogPostBody` as we expect the request body to match this structure.
+// 4. Query: Query string parameters type. Set to `unknown` since no specific query parameters are expected.
+export const createBlogPost: RequestHandler<
+  unknown,
+  unknown,
+  BlogPostBody,
+  unknown
+> = async (req, res, next) => {
+  const { slug, title, summary, body } = req.body;
+
+  try {
+    const newPost = await BlogPostModel.create({
+      slug,
+      title,
+      summary,
+      body,
+    });
+
+    res.status(201).json(newPost);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
