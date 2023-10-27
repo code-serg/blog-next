@@ -1,10 +1,12 @@
 import 'dotenv/config';
 import express from 'express';
+import blogPostRoutes from './routes/blog-posts';
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hi Server');
-});
+// parse JSON bodies into JS objects
+app.use(express.json());
+
+app.use('/posts', blogPostRoutes);
 
 export default app;
