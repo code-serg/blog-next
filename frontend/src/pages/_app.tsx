@@ -2,6 +2,7 @@ import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
 import { Container, SSRProvider } from 'react-bootstrap';
+import NavBar from '@/components/NavBar';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/styles/globals.scss';
@@ -24,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <SSRProvider>
         <div className={inter.className}>
+          <NavBar />
           <main>
             <Container className={styles.pageContainer}>
               <Component {...pageProps} />
