@@ -12,7 +12,8 @@
 
 # Blog-Next
 
-Blog-Next is a full-feature blog based on Next.js.
+Blog-Next is a full-feature blog built on the MERN stack with the Next.js framework.
+The blog is a mobile-responsive site, with user accounts, markdown editor, comments and much more.
 
 ## Features
 
