@@ -1,0 +1,10 @@
+.brandText {
+  background-image: linear-gradient(90deg, rgb(239, 46, 239), rgb(239, 126, 239));
+  background-color: rgb(239, 126, 239);
+  background-clip: text;
+  -webkkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  font-weight: bold;
+}
