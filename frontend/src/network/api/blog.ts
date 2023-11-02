@@ -1,6 +1,13 @@
-import { BlogPost } from '@/models/blog-post';
 // pre-configured instance of Axios for making HTTP requests (has baseURL set to the backend URL)
 import api from '@/network/axiosInstance';
+import { BlogPost } from '@/models/blog-post';
+
+export async function getBlogPosts() {
+  // Sending a GET request to the '/posts' endpoint.
+  // The expected response data is an array of BlogPost objects.
+  const response = await api.get<BlogPost[]>('/posts');
+  return response.data;
+}
 
 interface CreateBlogPostValues {
   slug: string;
