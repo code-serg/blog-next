@@ -32,13 +32,13 @@ The blog is a mobile-responsive site, with user accounts, markdown editor, comme
 - **Frontend**: Next.js
 - **Styling**: Bootstrap, custom CSS
 
-# Development Concepts
+## Development Concepts
 
 - **Server Side Rendering**: Faster loading times, on-demand revalidation
 - **Advanced React**: Custom hooks, useEffect cleanup, context providers...
 - **React Form Handling**
 - **Security**: Best Practices with input validation, file uploads and rate-limiting
 
-# Status
+## Status
 
 Development is in progress
