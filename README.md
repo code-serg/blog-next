@@ -3,6 +3,7 @@
     <img src="frontend/src/assets/images/logo-bn.png" width="50" alt="logo">
   </p>
   <p align="center">
+    <img src="https://img.shields.io/github/package-json/dependency-version/code-serg/blog-next/next?filename=frontend%2Fpackage.json&color=bright-green" alt="react-version">
     <img src="https://img.shields.io/github/package-json/dependency-version/code-serg/blog-next/react?filename=frontend%2Fpackage.json" alt="react-version">
     <img src="https://img.shields.io/github/package-json/dependency-version/code-serg/blog-next/react-bootstrap?filename=frontend%2Fpackage.json&color=purple" alt="react-version">
     <img src="https://img.shields.io/github/package-json/dependency-version/code-serg/blog-next/express?filename=backend%2Fpackage.json&color=green" alt="react-version">
