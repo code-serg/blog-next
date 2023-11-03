@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { Card } from 'react-bootstrap';
 import { formatDate } from '@/utils/utils';
 
-interface BlogPostEntryProps {
+interface BlogPostCardProps {
   post: BlogPost;
 }
 
-export default function BlogPostEntry({ post: { slug, title, summary, createdAt } }: BlogPostEntryProps) {
+export default function BlogPostCard({ post: { slug, title, summary, createdAt } }: BlogPostCardProps) {
   const postLink = `/blog/${slug}`;
 
   return (

@@ -1,9 +1,8 @@
 import { BlogPost } from '@/models/blog-post';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import BlogPostEntry from '@/components/BlogPostEntry';
+import BlogPostGrid from '@/components/BlogPostsGrid';
 import * as BlogApi from '@/network/api/blog';
-import { Col, Row } from 'react-bootstrap';
 
 // typescript interface for the props object
 interface BlogPageProps {
@@ -27,13 +26,7 @@ export default function BlogPage({ posts }: BlogPageProps) {
       </Head>
       <div>
         <h1>Blog Next</h1>
-        <Row xs={1} sm={2} lg={3} className="g-3">
-          {posts.map((post) => (
-            <Col key={post._id} className="g-2">
-              <BlogPostEntry key={post._id} post={post} />
-            </Col>
-          ))}
-        </Row>
+        <BlogPostGrid posts={posts} />
       </div>
     </>
   );
