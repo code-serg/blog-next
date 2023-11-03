@@ -1,8 +1,9 @@
 import { BlogPost } from '@/models/blog-post';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { Button } from 'react-bootstrap';
+import BlogPostEntry from '@/components/BlogPostEntry';
 import * as BlogApi from '@/network/api/blog';
+import { Col, Row } from 'react-bootstrap';
 
 // typescript interface for the props object
 interface BlogPageProps {
@@ -24,7 +25,16 @@ export default function BlogPage({ posts }: BlogPageProps) {
         <title>Articles - Blog</title>
         <meta name="description" content="Full Stack Blog with MERN + Next.js" />
       </Head>
-      <div>{JSON.stringify(posts)}</div>
+      <div>
+        <h1>Blog Next</h1>
+        <Row xs={1} sm={2} lg={3} className="g-3">
+          {posts.map((post) => (
+            <Col key={post._id} className="g-2">
+              <BlogPostEntry key={post._id} post={post} />
+            </Col>
+          ))}
+        </Row>
+      </div>
     </>
   );
 }
