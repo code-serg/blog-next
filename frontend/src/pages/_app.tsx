@@ -3,11 +3,12 @@ import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
 import { Container, SSRProvider } from 'react-bootstrap';
 import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/styles/globals.scss';
+import '@/styles/utils.css';
 import styles from '@/styles/App.module.css';
-import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 

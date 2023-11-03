@@ -18,7 +18,9 @@ export default function BlogPostEntry({ post: { slug, title, summary, createdAt 
             <Link href={postLink}>{title}</Link>
           </Card.Title>
           <Card.Text>{summary}</Card.Text>
-          <Card.Text className="text-muted">{formatDate(createdAt)}</Card.Text>
+          <Card.Text className="text-muted small">
+            <time dateTime={createdAt}>{formatDate(createdAt)}</time>
+          </Card.Text>
         </Card.Body>
       </article>
     </Card>
