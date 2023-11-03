@@ -1,6 +1,7 @@
 import { BlogPost } from '@/models/blog-post';
 import Link from 'next/link';
 import { Card } from 'react-bootstrap';
+import { formatDate } from '@/utils/utils';
 
 interface BlogPostEntryProps {
   post: BlogPost;
@@ -17,7 +18,7 @@ export default function BlogPostEntry({ post: { slug, title, summary, createdAt 
             <Link href={postLink}>{title}</Link>
           </Card.Title>
           <Card.Text>{summary}</Card.Text>
-          <Card.Text>{createdAt}</Card.Text>
+          <Card.Text className="text-muted">{formatDate(createdAt)}</Card.Text>
         </Card.Body>
       </article>
     </Card>
