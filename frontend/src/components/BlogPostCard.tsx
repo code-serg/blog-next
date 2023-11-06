@@ -5,13 +5,14 @@ import { formatDate } from '@/utils/utils';
 
 interface BlogPostCardProps {
   post: BlogPost;
+  className?: string;
 }
 
-export default function BlogPostCard({ post: { slug, title, summary, createdAt } }: BlogPostCardProps) {
+export default function BlogPostCard({ post: { slug, title, summary, createdAt }, className }: BlogPostCardProps) {
   const postLink = `/blog/${slug}`;
 
   return (
-    <Card className="mb-4">
+    <Card className={className}>
       <article>
         <Card.Body>
           <Card.Title>

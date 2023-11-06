@@ -1,0 +1,9 @@
+.card {
+  height: 100%;
+  border: none;
+}
+
+.card:hover {
+  box-shadow: rgba(var(--bs-primary-rgb), 0.25) 0px 0px 15px 0.65rem;
+  outline: 2px var(--bs-primary) solid;
+}

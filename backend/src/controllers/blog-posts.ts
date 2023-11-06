@@ -5,7 +5,7 @@ import BlogPostModel from '../models/blog-post';
 // function can be used, but then req, res, and next type must be indivually defined
 export const getBlogPosts: RequestHandler = async (req, res, next) => {
   try {
-    const allBlogPosts = await BlogPostModel.find().exec();
+    const allBlogPosts = await BlogPostModel.find().sort({ _id: -1 }).exec();
 
     res.status(200).json(allBlogPosts);
   } catch (error) {
@@ -25,12 +25,7 @@ interface BlogPostBody {
 // 2. ResBody: Response body type. Set to `unknown` as the response structure isn't explicitly typed.
 // 3. ReqBody: Request body type. It's of type `BlogPostBody` as we expect the request body to match this structure.
 // 4. Query: Query string parameters type. Set to `unknown` since no specific query parameters are expected.
-export const createBlogPost: RequestHandler<
-  unknown,
-  unknown,
-  BlogPostBody,
-  unknown
-> = async (req, res, next) => {
+export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unknown> = async (req, res, next) => {
   const { slug, title, summary, body } = req.body;
 
   try {

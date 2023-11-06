@@ -1,7 +1,7 @@
 import { BlogPost } from '@/models/blog-post';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import BlogPostGrid from '@/components/BlogPostsGrid';
+import BlogPostsGrid from '@/components/BlogPostsGrid';
 import * as BlogApi from '@/network/api/blog';
 
 // typescript interface for the props object
@@ -26,7 +26,7 @@ export default function BlogPage({ posts }: BlogPageProps) {
       </Head>
       <div>
         <h1>Blog Next</h1>
-        <BlogPostGrid posts={posts} />
+        <BlogPostsGrid posts={posts} />
       </div>
     </>
   );
