@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { Container, SSRProvider } from 'react-bootstrap';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
+import NextNProgress from 'nextjs-progressbar';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/styles/globals.scss';
@@ -24,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <SSRProvider>
         <div className={inter.className}>
+          <NextNProgress color="var(--bs-primary)" />
           <NavBar />
           <main>
             <Container className={styles.pageContainer}>
