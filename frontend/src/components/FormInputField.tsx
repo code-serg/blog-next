@@ -8,12 +8,13 @@
 
 import { ComponentProps } from 'react';
 import { Form, FormControlProps } from 'react-bootstrap';
-import { UseFormRegisterReturn } from 'react-hook-form';
+import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
 interface FormInputFieldProps {
   // the register function from react-hook-form is of type UseFormRegisterReturn
   register: UseFormRegisterReturn;
   label?: string;
+  error?: FieldError;
 }
 
 // '&' is the Intersection Type operator - allows the function to accept additional props
@@ -23,12 +24,14 @@ interface FormInputFieldProps {
 export default function FormInputField({
   register,
   label,
+  error,
   ...props
 }: FormInputFieldProps & FormControlProps & ComponentProps<'input'>) {
   return (
     <Form.Group className="mb-3" controlId={register.name + '-input'}>
       {label && <Form.Label>{label}</Form.Label>}
-      <Form.Control {...register} {...props} />
+      <Form.Control {...register} {...props} isInvalid={!!error} />
+      <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
     </Form.Group>
   );
 }
