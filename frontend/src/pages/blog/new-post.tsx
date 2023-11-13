@@ -1,6 +1,7 @@
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as BlogApi from '@/network/api/blog';
+import FormInputField from '@/components/FormInputField';
 
 interface CreatePostFromData {
   title: string;
@@ -25,31 +26,30 @@ export default function CreateBlogPostPage() {
 
   return (
     <div>
-      <h1>Create Blog Post</h1>
+      <h1>Create a Post</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Form.Group className="mb-3" controlId="title-input">
-          <Form.Label>Post Title</Form.Label>
-          <Form.Control {...register('title')} placeholder="Enter post title" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="slug-input">
-          <Form.Label>Post Slug</Form.Label>
-          <Form.Control {...register('slug')} placeholder="Enter post slug" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="summary-input">
-          <Form.Label>Post Summary</Form.Label>
-          <Form.Control
-            {...register('summary')}
-            as="textarea"
-            placeholder="Enter post summary"
-          />
-        </Form.Group>
+        <FormInputField
+          register={register('title')}
+          label="Post Title"
+          placeholder="Enter Post Title"
+          maxLength={105}
+        />
+        <FormInputField
+          register={register('slug')}
+          label="Post Slug"
+          placeholder="Enter Post Slug"
+          maxLength={105}
+        />
+        <FormInputField
+          register={register('summary')}
+          label="Post Summary"
+          placeholder="Enter Post Summary"
+          maxLength={300}
+          as="textarea"
+        />
         <Form.Group className="mb-3" controlId="body-input">
           <Form.Label>Post Body</Form.Label>
-          <Form.Control
-            {...register('body')}
-            as="textarea"
-            placeholder="Enter post body"
-          />
+          <Form.Control {...register('body')} as="textarea" placeholder="Enter post body" />
         </Form.Group>
         <Button variant="primary" type="submit">
           Create Post
