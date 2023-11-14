@@ -28,9 +28,16 @@ export default function FormInputField({
   ...props
 }: FormInputFieldProps & FormControlProps & ComponentProps<'input'>) {
   return (
-    <Form.Group className="mb-3" controlId={register.name + '-input'}>
+    <Form.Group
+      className="mb-3"
+      controlId={register.name + '-input'}
+    >
       {label && <Form.Label>{label}</Form.Label>}
-      <Form.Control {...register} {...props} isInvalid={!!error} />
+      <Form.Control
+        {...register}
+        {...props}
+        isInvalid={!!error}
+      />
       <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
     </Form.Group>
   );

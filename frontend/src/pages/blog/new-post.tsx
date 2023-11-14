@@ -1,7 +1,8 @@
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as BlogApi from '@/network/api/blog';
-import FormInputField from '@/components/FormInputField';
+import FormInputField from '@/components/form/FormInputField';
+import MarkdownEditor from '@/components/form/MarkdownEditor';
 
 interface CreatePostFromData {
   title: string;
@@ -14,6 +15,8 @@ export default function CreateBlogPostPage() {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<CreatePostFromData>();
 
@@ -33,36 +36,38 @@ export default function CreateBlogPostPage() {
       <h1>Create a Post</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormInputField
-          register={register('title', { required: 'Required' })}
           label="Post Title"
+          register={register('title', { required: 'Required' })}
           placeholder="Enter Post Title"
           maxLength={105}
           error={errors.title}
         />
         <FormInputField
-          register={register('slug', { required: 'Required' })}
           label="Post Slug"
+          register={register('slug', { required: 'Required' })}
           placeholder="Enter Post Slug"
           maxLength={105}
           error={errors.slug}
         />
         <FormInputField
-          register={register('summary', { required: 'Required' })}
           label="Post Summary"
+          register={register('summary', { required: 'Required' })}
           placeholder="Enter Post Summary"
           maxLength={300}
           as="textarea"
           error={errors.summary}
         />
-        <Form.Group className="mb-3" controlId="body-input">
-          <Form.Label>Post Body</Form.Label>
-          <Form.Control
-            {...register('body', { required: 'Required' })}
-            as="textarea"
-            placeholder="Enter post body"
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit">
+        <MarkdownEditor
+          label="Post Body"
+          register={register('body', { required: 'Required' })}
+          setValue={setValue}
+          watch={watch}
+          error={errors.body}
+        />
+        <Button
+          variant="primary"
+          type="submit"
+        >
           Create Post
         </Button>
       </Form>
