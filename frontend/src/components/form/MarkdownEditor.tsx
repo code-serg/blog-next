@@ -15,6 +15,7 @@ interface MarkdownEditorProps {
   watch: UseFormWatch<any>;
   label?: string;
   error?: FieldError;
+  editorHeight?: number;
 }
 
 /*
@@ -27,7 +28,14 @@ interface MarkdownEditorProps {
     watch: used to read the value of a form field
 */
 
-export default function MarkdownEditor({ register, label, setValue, watch, error }: MarkdownEditorProps) {
+export default function MarkdownEditor({
+  register,
+  label,
+  setValue,
+  watch,
+  error,
+  editorHeight = 600,
+}: MarkdownEditorProps) {
   return (
     <Form.Group className="mb-3">
       {label && <Form.Label htmlFor={register.name + '-input_md'}>{label}</Form.Label>}
@@ -39,6 +47,7 @@ export default function MarkdownEditor({ register, label, setValue, watch, error
         // onChange must be placed after {...register}
         onChange={({ text }) => setValue(register.name, text, { shouldValidate: true, shouldDirty: true })}
         className={error ? 'is-invalid' : ''}
+        style={{ height: editorHeight }}
       />
       <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
     </Form.Group>
