@@ -13,25 +13,30 @@ interface MarkdownEditorProps {
   register: UseFormRegisterReturn;
   setValue: UseFormSetValue<any>;
   watch: UseFormWatch<any>;
-  label: string;
+  label?: string;
   error?: FieldError;
 }
 
-// Getting MdEditor to work with react-hook-form takes a bit of work
-// Some of the props we use are not compatible by default with the MdEditor component
-// register: The 'onChange' function from 'register' is not compatible with the 'onChange' function from MdEditor, so we define it explicitly
-// controlId: '_md' gets appended to the label, so we override with using 'htmlFor' and 'id'
-// Form.Control.Feedback: set the className manually to 'is-invalid' if there is an error
-//
-export default function MarkdownEditor({ label, register, setValue, watch, error }: MarkdownEditorProps) {
+/*
+  Getting MdEditor to work with react-hook-form takes a bit of work
+  Some of the props we use are not compatible by default with the MdEditor component
+  controlId (connects label to the form field): '_md' gets appended to the label, so we override with using 'htmlFor' and 'id'
+  Form.Control.Feedback: set the className manually to 'is-invalid' if there is an error
+  register: The 'onChange' function from 'register' is not compatible with the 'onChange' from MdEditor, so we define it explicitly
+    setValue: used to set a value manually on a form (set markdown text and more)
+    watch: used to read the value of a form field
+*/
+
+export default function MarkdownEditor({ register, label, setValue, watch, error }: MarkdownEditorProps) {
   return (
     <Form.Group className="mb-3">
-      <Form.Label htmlFor={register.name + '-input_md'}>{label}</Form.Label>
+      {label && <Form.Label htmlFor={register.name + '-input_md'}>{label}</Form.Label>}
       <MdEditor
         {...register}
         id={register.name + '-input'}
         renderHTML={(text) => <ReactMarkdown>{text}</ReactMarkdown>}
         value={watch(register.name)}
+        // onChange must be placed after {...register}
         onChange={({ text }) => setValue(register.name, text, { shouldValidate: true, shouldDirty: true })}
         className={error ? 'is-invalid' : ''}
       />
