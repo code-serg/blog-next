@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import * as BlogApi from '@/network/api/blog';
 import FormInputField from '@/components/form/FormInputField';
 import MarkdownEditor from '@/components/form/MarkdownEditor';
+import { generateSlug } from '@/utils/utils';
 
 interface CreatePostFromData {
   title: string;
@@ -17,6 +18,7 @@ export default function CreateBlogPostPage() {
     handleSubmit,
     setValue,
     watch,
+    getValues,
     formState: { errors },
   } = useForm<CreatePostFromData>();
 
@@ -31,6 +33,12 @@ export default function CreateBlogPostPage() {
     }
   }
 
+  function generateSlugFromTitle(title: string) {
+    if (getValues('slug')) return;
+    const slug = generateSlug(getValues('title'));
+    setValue('slug', slug, { shouldValidate: true });
+  }
+
   return (
     <div>
       <h1>Create a Post</h1>
@@ -41,6 +49,7 @@ export default function CreateBlogPostPage() {
           placeholder="Enter Post Title"
           maxLength={105}
           error={errors.title}
+          onBlur={generateSlugFromTitle}
         />
         <FormInputField
           label="Post Slug"
