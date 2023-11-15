@@ -48,6 +48,7 @@ export default function MarkdownEditor({
         onChange={({ text }) => setValue(register.name, text, { shouldValidate: true, shouldDirty: true })}
         className={error ? 'is-invalid' : ''}
         style={{ height: editorHeight }}
+        placeholder="Write your markdown here..."
       />
       <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
     </Form.Group>

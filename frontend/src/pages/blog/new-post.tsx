@@ -4,6 +4,7 @@ import * as BlogApi from '@/network/api/blog';
 import FormInputField from '@/components/form/FormInputField';
 import MarkdownEditor from '@/components/form/MarkdownEditor';
 import { generateSlug } from '@/utils/utils';
+import LoadingButton from '@/components/LoadingButton';
 
 interface CreatePostFromData {
   title: string;
@@ -19,7 +20,7 @@ export default function CreateBlogPostPage() {
     setValue,
     watch,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CreatePostFromData>();
 
   async function onSubmit(input: CreatePostFromData) {
@@ -74,12 +75,13 @@ export default function CreateBlogPostPage() {
           watch={watch}
           error={errors.body}
         />
-        <Button
+        <LoadingButton
           variant="primary"
           type="submit"
+          isLoading={isSubmitting}
         >
           Create Post
-        </Button>
+        </LoadingButton>
       </Form>
     </div>
   );
