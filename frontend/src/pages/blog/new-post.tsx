@@ -34,7 +34,7 @@ export default function CreateBlogPostPage() {
     }
   }
 
-  function generateSlugFromTitle(title: string) {
+  function generateSlugFromTitle() {
     if (getValues('slug')) return; // do nothing if slug already exists
 
     const slug = generateSlug(getValues('title'));
