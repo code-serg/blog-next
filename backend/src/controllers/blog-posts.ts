@@ -1,7 +1,9 @@
 import { RequestHandler } from 'express';
+import mongoose from 'mongoose';
+import sharp from 'sharp';
 import BlogPostModel from '../models/blog-post';
 import assertIsDefined from '../utils/assertIsDefined';
-import mongoose from 'mongoose';
+import env from '../env';
 
 // using const instead of function - this syntax allows for defining the type - then req, res, next are automatically typed
 // function can be used, but then req, res, and next type must be indivually defined
@@ -42,11 +44,17 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unkn
 
     const featureImageDestinationPath = '/uploads/featured-images/' + blogPostId + '.png';
 
+    await sharp(featuredImage.buffer)
+      .resize(700, 450)
+      .toFile('./' + featureImageDestinationPath);
+
     const newPost = await BlogPostModel.create({
+      _id: blogPostId,
       slug,
       title,
       summary,
       body,
+      featuredImageUrl: env.SERVER_URL + featureImageDestinationPath,
     });
 
     res.status(201).json(newPost);
