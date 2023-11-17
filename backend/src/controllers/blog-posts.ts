@@ -1,5 +1,7 @@
 import { RequestHandler } from 'express';
 import BlogPostModel from '../models/blog-post';
+import assertIsDefined from '../utils/assertIsDefined';
+import mongoose from 'mongoose';
 
 // using const instead of function - this syntax allows for defining the type - then req, res, next are automatically typed
 // function can be used, but then req, res, and next type must be indivually defined
@@ -25,10 +27,21 @@ interface BlogPostBody {
 // 2. ResBody: Response body type. Set to `unknown` as the response structure isn't explicitly typed.
 // 3. ReqBody: Request body type. It's of type `BlogPostBody` as we expect the request body to match this structure.
 // 4. Query: Query string parameters type. Set to `unknown` since no specific query parameters are expected.
-export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unknown> = async (req, res, next) => {
+export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unknown> = async (
+  req,
+  res,
+  next
+) => {
   const { slug, title, summary, body } = req.body;
+  const featuredImage = req.file;
 
   try {
+    assertIsDefined(featuredImage);
+
+    const blogPostId = new mongoose.Types.ObjectId();
+
+    const featureImageDestinationPath = '/uploads/featured-images/' + blogPostId + '.png';
+
     const newPost = await BlogPostModel.create({
       slug,
       title,
