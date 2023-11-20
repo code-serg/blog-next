@@ -14,11 +14,17 @@ interface CreateBlogPostValues {
   title: string;
   summary: string;
   body: string;
+  featuredImage: File;
 }
 
 export async function createBlogPost(input: CreateBlogPostValues) {
+  const formData = new FormData();
+  Object.entries(input).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+
   // Sending a POST request to the '/posts' endpoint with the input data.
   // The expected response data is of type BlogPost.
-  const response = await api.post<BlogPost>('/posts', input);
+  const response = await api.post<BlogPost>('/posts', formData);
   return response.data;
 }

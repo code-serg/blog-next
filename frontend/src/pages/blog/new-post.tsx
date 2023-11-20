@@ -11,6 +11,10 @@ interface CreatePostFromData {
   slug: string;
   summary: string;
   body: string;
+  // 'featureImage' must match as defined in backend routes/blog-posts.ts
+  // react-hooks-form uses 'FileList' for file input.
+  // backend uses File for type, so pass featuredImage[0] to createBlogPost
+  featuredImage: FileList;
 }
 
 export default function CreateBlogPostPage() {
@@ -23,10 +27,10 @@ export default function CreateBlogPostPage() {
     formState: { errors, isSubmitting },
   } = useForm<CreatePostFromData>();
 
-  async function onSubmit(input: CreatePostFromData) {
+  async function onSubmit({ title, slug, summary, body, featuredImage }: CreatePostFromData) {
     try {
       // call api to create post
-      await BlogApi.createBlogPost(input);
+      await BlogApi.createBlogPost({ title, slug, summary, body, featuredImage: featuredImage[0] });
       alert('Post created successfully');
     } catch (error) {
       console.error(error);
@@ -67,6 +71,13 @@ export default function CreateBlogPostPage() {
           maxLength={300}
           as="textarea"
           error={errors.summary}
+        />
+        <FormInputField
+          label="Post Image"
+          register={register('featuredImage', { required: 'Required' })}
+          type="file"
+          accept="image/png, image/jpeg"
+          error={errors.featuredImage}
         />
         <MarkdownEditor
           label="Post Body"
