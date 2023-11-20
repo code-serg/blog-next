@@ -1,5 +1,6 @@
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 import * as BlogApi from '@/network/api/blog';
 import FormInputField from '@/components/form/FormInputField';
 import MarkdownEditor from '@/components/form/MarkdownEditor';
@@ -18,6 +19,8 @@ interface CreatePostFromData {
 }
 
 export default function CreateBlogPostPage() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -31,7 +34,7 @@ export default function CreateBlogPostPage() {
     try {
       // call api to create post
       await BlogApi.createBlogPost({ title, slug, summary, body, featuredImage: featuredImage[0] });
-      alert('Post created successfully');
+      await router.push('/blog/' + slug);
     } catch (error) {
       console.error(error);
       alert(error);
