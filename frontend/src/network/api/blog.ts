@@ -8,6 +8,19 @@ export async function getBlogPosts() {
   const response = await api.get<BlogPost[]>('/posts');
   return response.data;
 }
+export async function getAllBlogPostSlugs() {
+  // Sending a GET request to the '/posts/slugs' endpoint.
+  // The expected response data is an array of strings.
+  const response = await api.get<string[]>('/posts/slugs');
+  return response.data;
+}
+
+export async function getBlogPostBySlug(slug: string) {
+  // Sending a GET request to the '/posts/:slug' endpoint.
+  // The expected response data is of type BlogPost.
+  const response = await api.get<BlogPost>(`/posts/post/${slug}`);
+  return response.data;
+}
 
 interface CreateBlogPostValues {
   slug: string;
