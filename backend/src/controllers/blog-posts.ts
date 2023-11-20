@@ -17,6 +17,34 @@ export const getBlogPosts: RequestHandler = async (req, res, next) => {
   }
 };
 
+// Why this? Because of getStaticPaths in pages/blog/[slug].tsx
+export const getAllBlogPostSlugs: RequestHandler = async (req, res, next) => {
+  try {
+    const results = await BlogPostModel.find({}, { slug: 1 }).exec();
+    const slugs = results.map((result) => result.slug);
+
+    res.status(200).json(slugs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+};
+
+export const getBlogPostBySlug: RequestHandler<{ slug: string }> = async (req, res, next) => {
+  try {
+    const blogPost = await BlogPostModel.findOne({ slug: req.params.slug }).exec();
+
+    if (!blogPost) {
+      return res.sendStatus(404);
+    }
+
+    res.status(200).json(blogPost);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+};
+
 interface BlogPostBody {
   slug: string;
   title: string;
