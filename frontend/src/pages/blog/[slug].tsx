@@ -4,6 +4,7 @@ import * as BlogApi from '@/network/api/blog';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { formatDate, formatTime } from '@/utils/utils';
 import styles from '@/styles/BlogPostPage.module.css';
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -33,6 +34,10 @@ interface BlogPostPageProps {
 export default function BlogPostPage({
   post: { _id, slug, title, summary, body, featuredImageUrl, createdAt, updatedAt },
 }: BlogPostPageProps) {
+  const createdOrUpdated = createdAt !== updatedAt ? 'Updated' : 'Created';
+  const date = formatDate(updatedAt); // the 'updatedAt' is always the latest
+  const time = formatTime(updatedAt);
+
   return (
     <>
       <Head>
@@ -43,18 +48,25 @@ export default function BlogPostPage({
         />
       </Head>
       <div className={styles.container}>
-        <Link href="/blog"> &larr; Blog Home </Link>
-        <h1>{title}</h1>
-        <p>{summary}</p>
-        {/* <Image
-          src={featuredImageUrl}
-          alt={title}
-          width={300}
-          height={200}
-        /> */}
-        <p>{body}</p>
-        <p>{createdAt}</p>
-        <p>{updatedAt}</p>
+        <div className="text-center mb-3">
+          <Link href="/blog"> &larr; Blog Home </Link>
+        </div>
+        <article>
+          <div className="d-flex flex-column align-items-center">
+            <h2 className="text-center mb-3">{title}</h2>
+            <p className="mb-3 h5">{summary}</p>
+            <span className="text-muted mb-2">{`${createdOrUpdated} on ${date} at ${time}`}</span>
+            <Image
+              src={featuredImageUrl}
+              alt="Featured Image"
+              width={700}
+              height={450}
+              priority
+              className="rounded"
+            />
+            <p>{body}</p>
+          </div>
+        </article>
       </div>
     </>
   );
