@@ -56,14 +56,15 @@ export default function BlogPostPage({
             <h2 className="text-center mb-3">{title}</h2>
             <p className="mb-3 h5">{summary}</p>
             <span className="text-muted mb-2">{`${createdOrUpdated} on ${date} at ${time}`}</span>
-            <Image
-              src={featuredImageUrl}
-              alt="Featured Image"
-              width={700}
-              height={450}
-              priority
-              className="rounded"
-            />
+            <div className={styles.featuredImageWrapper}>
+              <Image
+                src={featuredImageUrl}
+                alt="Featured Image"
+                fill
+                priority
+                className="rounded"
+              />
+            </div>
             <p>{body}</p>
           </div>
         </article>
