@@ -18,13 +18,15 @@ export default function BlogPostCard({
   return (
     <Card className={className}>
       <article>
-        <Image
-          src={featuredImageUrl}
-          alt="Post Featured Image"
-          width={700}
-          height={200}
-          className="card-img-top object-fit-cover"
-        />
+        <Link href={postLink}>
+          <Image
+            src={featuredImageUrl}
+            alt="Post Featured Image"
+            width={700}
+            height={200}
+            className="card-img-top object-fit-cover"
+          />
+        </Link>
         <Card.Body>
           <Card.Title>
             <Link href={postLink}>{title}</Link>
