@@ -1,7 +1,15 @@
 import format from 'date-fns/format';
 
+export function formatDateTime(dateString: string) {
+  return format(new Date(dateString), 'yyyy-MM-dd HH:mm');
+}
+
 export function formatDate(dateString: string) {
   return format(new Date(dateString), 'yyyy-MM-dd');
+}
+
+export function formatTime(dateString: string) {
+  return format(new Date(dateString), 'HH:mm');
 }
 
 export function generateSlug(input: string) {

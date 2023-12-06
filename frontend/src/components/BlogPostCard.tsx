@@ -1,5 +1,6 @@
 import { BlogPost } from '@/models/blog-post';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Card } from 'react-bootstrap';
 import { formatDate } from '@/utils/utils';
 
@@ -8,12 +9,24 @@ interface BlogPostCardProps {
   className?: string;
 }
 
-export default function BlogPostCard({ post: { slug, title, summary, createdAt }, className }: BlogPostCardProps) {
+export default function BlogPostCard({
+  post: { slug, title, featuredImageUrl, summary, createdAt },
+  className,
+}: BlogPostCardProps) {
   const postLink = `/blog/${slug}`;
 
   return (
     <Card className={className}>
       <article>
+        <Link href={postLink}>
+          <Image
+            src={featuredImageUrl}
+            alt="Post Featured Image"
+            width={700}
+            height={200}
+            className="card-img-top object-fit-cover"
+          />
+        </Link>
         <Card.Body>
           <Card.Title>
             <Link href={postLink}>{title}</Link>
