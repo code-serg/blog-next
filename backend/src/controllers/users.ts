@@ -9,10 +9,10 @@ interface SignUpBody {
   email: string;
 }
 export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = async (req, res, next) => {
-  const { username, password: passwordRaw, email } = req.body;
+  const { username, email, password: passwordRaw } = req.body;
   try {
     const existingUsername = await UserModel.findOne({ username })
-      .collation({ locale: 'en', strength: 2 })
+      .collation({ locale: 'en', strength: 1 })
       .exec();
 
     if (existingUsername) {
