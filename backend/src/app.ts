@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import blogPostRoutes from './routes/blog-posts';
+import userRoutes from './routes/users';
 import cors from 'cors';
 import env from './env';
 import morgan from 'morgan';
@@ -23,6 +24,8 @@ app.use(
 app.use('/uploads/featured-images', express.static('uploads/featured-images'));
 
 app.use('/posts', blogPostRoutes);
+
+app.use('/users', userRoutes);
 
 app.use((req, res, next) => next(createHttpError(404, 'Resource Not found')));
 
