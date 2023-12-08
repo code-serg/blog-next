@@ -11,7 +11,7 @@ passport.serializeUser((user, cb) => {
 
 // deserializeUser will call with the unique id provided by serializeUser
 // to retrieve the user object.
-passport.deserializeUser(async (userId: string, cb) => {
+passport.deserializeUser((userId: string, cb) => {
   // commonly seen is to return the user object from the database
   // but here we are opting to just return the object with the user id
   cb(null, { _id: new mongoose.Types.ObjectId(userId) });
