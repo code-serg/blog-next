@@ -2,20 +2,29 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import UserModel from '../models/user';
 import bcrypt from 'bcrypt';
-import mongoose from 'mongoose';
 
 passport.serializeUser((user, cb) => {
   cb(null, user._id);
 });
 
-passport.deserializeUser((userId: string, cb) => {
-  cb(null, { _id: new mongoose.Types.ObjectId(userId) });
+passport.deserializeUser(async (userId: string, cb) => {
+  try {
+    const user = await UserModel.findById(userId).select('-password').exec();
+
+    if (!user) {
+      return cb(null, false);
+    }
+
+    cb(null, user);
+  } catch (error) {
+    cb(error);
+  }
 });
 
 passport.use(
   new LocalStrategy(async (username, password, cb) => {
     try {
-      const existingUser = await UserModel.findOne({ username }).select('+email +password').exec();
+      const existingUser = await UserModel.findOne({ username }).select('+email +password').lean();
 
       if (!existingUser || !existingUser.password) {
         return cb(null, false);
@@ -27,11 +36,11 @@ passport.use(
         return cb(null, false);
       }
 
-      const user = existingUser.toObject();
-
-      delete user.password;
-
-      return cb(null, user);
+      // bc existingUser is a plain JS object, we can delete the password property
+      delete existingUser.password;
+      // hydrate() converts a plain JS object into a Mongoose document
+      const userObject = UserModel.hydrate(existingUser);
+      return cb(null, userObject);
     } catch (error) {
       cb(error);
     }
