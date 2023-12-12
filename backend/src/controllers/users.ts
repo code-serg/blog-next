@@ -28,11 +28,17 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
       password: passwordHashed,
     });
 
-    // remove password from result before sending it back
-    const newUser = result.toObject();
-    delete newUser.password;
+    // must be converted to a plain JS object first, to remove the password property
+    const resultObject = result.toObject();
+    delete resultObject.password;
 
-    res.status(201).json(newUser);
+    // hydrate() converts a plain JS object into a Mongoose document
+    const newUser = UserModel.hydrate(resultObject);
+
+    req.logIn(newUser, (error) => {
+      if (error) throw error;
+      res.status(201).json(newUser);
+    });
   } catch (error) {
     next(error);
   }
