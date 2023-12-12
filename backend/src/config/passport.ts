@@ -8,7 +8,6 @@ passport.serializeUser((user, cb) => {
 });
 
 passport.deserializeUser(async (userId: string, cb) => {
-  // hydrate() converts a plain JS object into a Mongoose document
   const user = UserModel.hydrate({ _id: userId });
   cb(null, user);
 });
@@ -16,8 +15,7 @@ passport.deserializeUser(async (userId: string, cb) => {
 passport.use(
   new LocalStrategy(async (username, password, cb) => {
     try {
-      // lean() returns a plain JS object instead of a Mongoose document
-      const existingUser = await UserModel.findOne({ username }).select('+email +password').lean();
+      const existingUser = await UserModel.findOne({ username }).select('+email +password').exec();
 
       if (!existingUser || !existingUser.password) {
         return cb(null, false);
@@ -29,12 +27,14 @@ passport.use(
         return cb(null, false);
       }
 
-      // bc existingUser is a plain JS object, we can delete the password property
-      delete existingUser.password;
-      // It appears Passport requires a Mongoose Document in this function...
-      // So we hydrate() - convert a plain JS object into a Mongoose document
-      const userObject = UserModel.hydrate(existingUser);
-      return cb(null, userObject);
+      // must be converted to a plain JS object first, to remove the password property
+      const existingUserPlainObject = existingUser.toObject();
+      delete existingUserPlainObject.password;
+
+      // Convert back into a Mongoose document
+      const user = UserModel.hydrate(existingUserPlainObject);
+
+      return cb(null, user);
     } catch (error) {
       cb(error);
     }
