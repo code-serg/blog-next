@@ -33,22 +33,20 @@ export default function App({ Component, pageProps }: AppProps) {
         />
       </Head>
 
-      <SSRProvider>
-        <div className={inter.className}>
-          <NextNProgress color="var(--bs-primary)" />
-          <NavBar />
-          <main>
-            <Container className={styles.pageContainer}>
-              <Component {...pageProps} />
-            </Container>
-          </main>
-          <Footer />
-          <SignupModal
-            onHide={() => {}}
-            onLoginClicked={() => {}}
-          />
-        </div>
-      </SSRProvider>
+      <div className={inter.className}>
+        <NextNProgress color="var(--bs-primary)" />
+        <NavBar />
+        <main>
+          <Container className={styles.pageContainer}>
+            <Component {...pageProps} />
+          </Container>
+        </main>
+        <Footer />
+        <SignupModal
+          onHide={() => {}}
+          onLoginClicked={() => {}}
+        />
+      </div>
     </>
   );
 }
