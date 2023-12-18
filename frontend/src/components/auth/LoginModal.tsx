@@ -2,31 +2,31 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as UsersApi from '@/network/api/users';
 import FormInputField from '../form/FormInputField';
-import PasswordInputField from '../form/PasswordInputField';
 import LoadingButton from '../LoadingButton';
+import PasswordInputField from '../form/PasswordInputField';
 
-interface SignupFormData {
+interface LoginFormData {
   username: string;
-  email: string;
   password: string;
 }
 
-interface SignupModalProps {
+interface LoginModalProps {
   onDismiss: () => void;
-  onLoginInstead: () => void;
+  onSignupInstead: () => void;
+  onForgotPassword: () => void;
 }
 
-export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalProps) {
+export default function LoginModal({ onDismiss, onSignupInstead, onForgotPassword }: LoginModalProps) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignupFormData>();
+  } = useForm<LoginFormData>();
 
-  async function onSubmit(credentials: SignupFormData) {
+  async function onSubmit(credentials: LoginFormData) {
     try {
-      const newUser = await UsersApi.signup(credentials);
-      alert(JSON.stringify(newUser));
+      const user = await UsersApi.login(credentials);
+      alert(JSON.stringify(user));
     } catch (error) {
       console.error(error);
       alert(error);
@@ -40,7 +40,7 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Sign Up</Modal.Title>
+        <Modal.Title>Log In</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form
@@ -53,30 +53,37 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
             placeholder="Enter Username"
             error={errors.username}
           />
-          <FormInputField
-            register={register('email')}
-            label="Email"
-            type="email"
-            placeholder="Enter Email"
-            error={errors.email}
-          />
           <PasswordInputField
             register={register('password')}
             label="Password"
+            placeholder="Enter Password"
             error={errors.password}
           />
+          <Button
+            variant="link"
+            className="d-block ms-auto mb-3"
+            onClick={onForgotPassword}
+          >
+            Forgot Password?
+          </Button>
           <LoadingButton
             isLoading={isSubmitting}
             type="submit"
             className="w-100"
           >
-            Sign Up
+            Log In
           </LoadingButton>
         </Form>
 
         <div className="d-flex align-items-center justify-content-center mt-2 gap-2">
-          <span>Already have an account?</span>
-          <Button variant="link">Log In</Button>
+          <span>Don&apos;t have an account? </span>
+          <Button
+            variant="link"
+            className="p-0"
+            onClick={onSignupInstead}
+          >
+            Sign Up
+          </Button>
         </div>
       </Modal.Body>
     </Modal>

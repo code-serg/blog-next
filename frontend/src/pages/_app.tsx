@@ -5,7 +5,6 @@ import { Container, SSRProvider } from 'react-bootstrap';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import NextNProgress from 'nextjs-progressbar';
-import SignupModal from '@/components/auth/SignupModal';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/styles/globals.scss';
@@ -42,10 +41,6 @@ export default function App({ Component, pageProps }: AppProps) {
           </Container>
         </main>
         <Footer />
-        <SignupModal
-          onDismiss={() => {}}
-          onLoginInstead={() => {}}
-        />
       </div>
     </>
   );
