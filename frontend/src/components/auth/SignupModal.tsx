@@ -1,4 +1,4 @@
-import { Form, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as UsersApi from '@/network/api/users';
 import FormInputField from '../form/FormInputField';
@@ -75,6 +75,10 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
             Sign Up
           </LoadingButton>
         </Form>
+        <div className="d-flex align-items-center justify-content-center mt-2 gap-2">
+          <span>Already have an account?</span>
+          <Button variant="link">Log In</Button>
+        </div>
       </Modal.Body>
     </Modal>
   );
