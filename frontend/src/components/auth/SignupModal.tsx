@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import * as UsersApi from '@/network/api/users';
 import FormInputField from '../form/FormInputField';
 import PasswordInputField from '../form/PasswordInputField';
+import LoadingButton from '../LoadingButton';
 
 interface SignupFormData {
   username: string;
@@ -48,7 +49,7 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
         >
           <FormInputField
             label="Username"
-            register={register('username', { required: 'Required' })}
+            register={register('username')}
             placeholder="Enter Username"
             maxLength={50}
             error={errors.username}
@@ -56,16 +57,23 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
           <FormInputField
             label="Email"
             type="email"
-            register={register('email', { required: 'Required' })}
+            register={register('email')}
             placeholder="Enter Email"
             maxLength={254}
             error={errors.email}
           />
           <PasswordInputField
             label="Password"
-            register={register('password', { required: 'Required' })}
+            register={register('password')}
             error={errors.password}
           />
+          <LoadingButton
+            isLoading={isSubmitting}
+            type="submit"
+            className="w-100"
+          >
+            Sign Up
+          </LoadingButton>
         </Form>
       </Modal.Body>
     </Modal>

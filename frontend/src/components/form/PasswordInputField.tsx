@@ -25,7 +25,6 @@ export default function PasswordInputField({
       error={error}
       {...props}
       type={showPassword ? 'text' : 'password'}
-      maxLength={250}
       inputGroupElement={
         <Button
           variant="secondary"
