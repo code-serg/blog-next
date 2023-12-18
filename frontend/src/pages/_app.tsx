@@ -18,23 +18,30 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Blog - Next</title>
-        <meta name="description" content="Full Stack Blog with MERN + Next.js" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="description"
+          content="Full Stack Blog with MERN + Next.js"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+        <link
+          rel="icon"
+          href="/favicon.ico"
+        />
       </Head>
 
-      <SSRProvider>
-        <div className={inter.className}>
-          <NextNProgress color="var(--bs-primary)" />
-          <NavBar />
-          <main>
-            <Container className={styles.pageContainer}>
-              <Component {...pageProps} />
-            </Container>
-          </main>
-          <Footer />
-        </div>
-      </SSRProvider>
+      <div className={inter.className}>
+        <NextNProgress color="var(--bs-primary)" />
+        <NavBar />
+        <main>
+          <Container className={styles.pageContainer}>
+            <Component {...pageProps} />
+          </Container>
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }
