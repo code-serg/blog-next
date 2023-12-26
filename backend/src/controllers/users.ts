@@ -8,6 +8,7 @@ interface SignUpBody {
   password: string;
   email: string;
 }
+
 export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = async (req, res, next) => {
   const { username, email, password: passwordRaw } = req.body;
   try {
@@ -35,6 +36,7 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
     // hydrate() converts a plain JS object into a Mongoose document
     const newUser = UserModel.hydrate(resultObject);
 
+    // req.logIn() is added to the request object by Passport
     req.logIn(newUser, (error) => {
       if (error) throw error;
       res.status(201).json(newUser);
@@ -42,4 +44,30 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
   } catch (error) {
     next(error);
   }
+};
+
+// upon successful login, the user is added to the request object by Passport's deserializer - Thus we can access it here
+export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
+  const authenticatedUser = req.user;
+
+  try {
+    if (!authenticatedUser) {
+      throw createHttpError(401, 'Not logged in');
+    }
+
+    const user = await UserModel.findById(authenticatedUser._id).select('+email').exec();
+
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// req.logOut() is added to the request object by Passport
+export const logout: RequestHandler = (req, res) => {
+  req.logOut((error) => {
+    if (error) throw error;
+
+    res.sendStatus(200);
+  });
 };
