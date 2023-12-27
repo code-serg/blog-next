@@ -8,4 +8,8 @@ router.post('/signup', UserController.signUp);
 
 router.post('/login', passport.authenticate('local'), (req, res) => res.status(200).json(req.user));
 
+router.get('/me', UserController.getAuthenticatedUser);
+
+router.post('/logout', UserController.logout);
+
 export default router;
