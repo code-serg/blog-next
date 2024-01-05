@@ -63,6 +63,7 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
           <PasswordInputField
             register={register('password')}
             label="Password"
+            placeholder="Enter Password"
             error={errors.password}
           />
           <LoadingButton
@@ -76,7 +77,13 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
 
         <div className="d-flex align-items-center justify-content-center mt-2 gap-2">
           <span>Already have an account?</span>
-          <Button variant="link">Log In</Button>
+          <Button
+            variant="link"
+            className="p-0"
+            onClick={onLoginInstead}
+          >
+            Log In
+          </Button>
         </div>
       </Modal.Body>
     </Modal>

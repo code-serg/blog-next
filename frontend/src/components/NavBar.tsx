@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { FiEdit } from 'react-icons/fi';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 import Logo from '@/assets/images/logo-bn.svg';
 import Image from 'next/image';
 import styles from '@/styles/NavBar.module.css';
+import { useState } from 'react';
+import LoginModal from './auth/LoginModal';
+import SignupModal from './auth/SignupModal';
 
 export default function NavBar() {
   const router = useRouter();
@@ -75,20 +78,46 @@ function LoggedInView() {
 }
 
 function LoggedOutView() {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+
   return (
-    <Nav className="ms-auto">
-      <Nav.Link
-        as={Link}
-        href="/login"
-      >
-        Login
-      </Nav.Link>
-      <Nav.Link
-        as={Link}
-        href="/register"
-      >
-        Register
-      </Nav.Link>
-    </Nav>
+    <>
+      <Nav className="ms-auto">
+        <Button
+          variant="outline-primary"
+          onClick={() => setShowLoginModal(true)}
+          className="mt-2 mt-md-0 ms-md-2"
+        >
+          Log In
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => setShowSignUpModal(true)}
+          className="mt-2 mt-md-0 ms-md-2"
+        >
+          Sign Up
+        </Button>
+      </Nav>
+      {showLoginModal && (
+        <LoginModal
+          onDismiss={() => setShowLoginModal(false)}
+          onSignupInstead={() => {
+            setShowLoginModal(false);
+            setShowSignUpModal(true);
+          }}
+          onForgotPassword={() => {}}
+        />
+      )}
+      {showSignUpModal && (
+        <SignupModal
+          onDismiss={() => setShowSignUpModal(false)}
+          onLoginInstead={() => {
+            setShowSignUpModal(false);
+            setShowLoginModal(true);
+          }}
+        />
+      )}
+    </>
   );
 }
