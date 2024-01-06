@@ -1,9 +1,12 @@
-import { Button, Form, Modal } from 'react-bootstrap';
+import { useState } from 'react';
+import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as UsersApi from '@/network/api/users';
 import FormInputField from '../form/FormInputField';
 import PasswordInputField from '../form/PasswordInputField';
 import LoadingButton from '../LoadingButton';
+import { BadRequestError, ConflictError } from '@/network/http-errors';
+import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 
 interface SignupFormData {
   username: string;
@@ -17,6 +20,10 @@ interface SignupModalProps {
 }
 
 export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalProps) {
+  const { userMutate } = useAuthenticatedUser();
+
+  const [errorText, setErrorText] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -25,11 +32,18 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
 
   async function onSubmit(credentials: SignupFormData) {
     try {
+      setErrorText(null);
       const newUser = await UsersApi.signup(credentials);
-      alert(JSON.stringify(newUser));
+      // since we have the user, update the cache/SWR right away (a bit quicker than waiting for the SWR to update itself)
+      userMutate(newUser);
+      onDismiss();
     } catch (error) {
-      console.error(error);
-      alert(error);
+      if (error instanceof ConflictError || error instanceof BadRequestError) {
+        setErrorText(error.message);
+      } else {
+        console.error(error);
+        alert(error);
+      }
     }
   }
 
@@ -43,6 +57,7 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
         <Modal.Title>Sign Up</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {errorText && <Alert variant="danger">{errorText}</Alert>}
         <Form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
@@ -63,6 +78,7 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
           <PasswordInputField
             register={register('password')}
             label="Password"
+            placeholder="Enter Password"
             error={errors.password}
           />
           <LoadingButton
@@ -76,7 +92,13 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
 
         <div className="d-flex align-items-center justify-content-center mt-2 gap-2">
           <span>Already have an account?</span>
-          <Button variant="link">Log In</Button>
+          <Button
+            variant="link"
+            className="p-0"
+            onClick={onLoginInstead}
+          >
+            Log In
+          </Button>
         </div>
       </Modal.Body>
     </Modal>

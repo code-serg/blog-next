@@ -5,7 +5,6 @@ import NextNProgress from 'nextjs-progressbar';
 import { Container } from 'react-bootstrap';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
-import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/styles/globals.scss';
@@ -15,8 +14,6 @@ import styles from '@/styles/App.module.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { user, userLoading, userError, userMutate } = useAuthenticatedUser();
-
   return (
     <>
       <Head>
@@ -38,11 +35,8 @@ export default function App({ Component, pageProps }: AppProps) {
       <div className={inter.className}>
         <NextNProgress color="var(--bs-primary)" />
         <NavBar />
-        <div>{user?.username}</div>
         <main>
-          <Container className={styles.pageContainer}>
-            <Component {...pageProps} />
-          </Container>
+          <Container className={styles.pageContainer}>{<Component {...pageProps} />}</Container>
         </main>
         <Footer />
       </div>
