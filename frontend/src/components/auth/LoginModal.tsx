@@ -1,9 +1,12 @@
-import { Button, Form, Modal } from 'react-bootstrap';
+import { useState } from 'react';
+import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as UsersApi from '@/network/api/users';
 import FormInputField from '../form/FormInputField';
 import LoadingButton from '../LoadingButton';
 import PasswordInputField from '../form/PasswordInputField';
+import { UnauthorizedError } from '@/network/http-errors';
+import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 
 interface LoginFormData {
   username: string;
@@ -17,6 +20,10 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ onDismiss, onSignupInstead, onForgotPassword }: LoginModalProps) {
+  const { userMutate } = useAuthenticatedUser();
+
+  const [errorText, setErrorText] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -25,11 +32,18 @@ export default function LoginModal({ onDismiss, onSignupInstead, onForgotPasswor
 
   async function onSubmit(credentials: LoginFormData) {
     try {
+      setErrorText(null);
       const user = await UsersApi.login(credentials);
-      alert(JSON.stringify(user));
+      // since we have the user, update the cache/SWR right away (a bit quicker than waiting for the SWR to update itself)
+      userMutate(user);
+      onDismiss();
     } catch (error) {
-      console.error(error);
-      alert(error);
+      if (error instanceof UnauthorizedError) {
+        setErrorText('Invalid username or password');
+      } else {
+        console.error(error);
+        alert(error);
+      }
     }
   }
 
@@ -43,6 +57,7 @@ export default function LoginModal({ onDismiss, onSignupInstead, onForgotPasswor
         <Modal.Title>Log In</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {errorText && <Alert variant="danger">{errorText}</Alert>}
         <Form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
