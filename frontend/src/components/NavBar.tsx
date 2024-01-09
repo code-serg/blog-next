@@ -106,6 +106,20 @@ function LoggedInView({ user }: LoggedInViewProps) {
           />
         }
       >
+        <NavDropdown.Item>
+          {user.username && (
+            <>
+              <Nav.Link
+                className="p-0"
+                as={Link}
+                href={`/user/${user.username}`}
+              >
+                My Profile
+              </Nav.Link>
+              <NavDropdown.Divider />
+            </>
+          )}
+        </NavDropdown.Item>
         <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
       </NavDropdown>
     </Nav>

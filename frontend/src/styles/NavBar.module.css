@@ -8,3 +8,11 @@
   -moz-text-fill-color: transparent;
   font-weight: bold;
 }
+
+/* use :global() on classes that are not locally scoped
+ * such as in internal Boostrap components 
+*/
+.accountDropdown :global(.nav-link) {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
