@@ -63,9 +63,11 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unkn
 ) => {
   const { slug, title, summary, body } = req.body;
   const featuredImage = req.file;
+  const authenticatedUser = req.user;
 
   try {
     assertIsDefined(featuredImage);
+    assertIsDefined(authenticatedUser);
 
     const existingSlug = await BlogPostModel.findOne({ slug }).exec();
 
@@ -88,6 +90,7 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unkn
       summary,
       body,
       featuredImageUrl: env.SERVER_URL + featureImageDestinationPath,
+      author: authenticatedUser._id,
     });
 
     res.status(201).json(newPost);
