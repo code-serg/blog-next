@@ -10,7 +10,7 @@ import createHttpError from 'http-errors';
 // function can be used, but then req, res, and next type must be indivually defined
 export const getBlogPosts: RequestHandler = async (req, res, next) => {
   try {
-    const allBlogPosts = await BlogPostModel.find().sort({ _id: -1 }).exec();
+    const allBlogPosts = await BlogPostModel.find().sort({ _id: -1 }).populate('author').exec();
 
     res.status(200).json(allBlogPosts);
   } catch (error) {
@@ -32,7 +32,7 @@ export const getAllBlogPostSlugs: RequestHandler = async (req, res, next) => {
 
 export const getBlogPostBySlug: RequestHandler<{ slug: string }> = async (req, res, next) => {
   try {
-    const blogPost = await BlogPostModel.findOne({ slug: req.params.slug }).exec();
+    const blogPost = await BlogPostModel.findOne({ slug: req.params.slug }).populate('author').exec();
 
     if (!blogPost) {
       throw createHttpError(404, 'Blog post not found for this slug');
