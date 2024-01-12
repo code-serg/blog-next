@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Card } from 'react-bootstrap';
 import { formatDate } from '@/utils/utils';
+import UserProfileLink from './UserProfileLink';
 
 interface BlogPostCardProps {
   post: BlogPost;
@@ -10,7 +11,7 @@ interface BlogPostCardProps {
 }
 
 export default function BlogPostCard({
-  post: { slug, title, featuredImageUrl, summary, createdAt },
+  post: { slug, title, featuredImageUrl, author, createdAt },
   className,
 }: BlogPostCardProps) {
   const postLink = `/blog/${slug}`;
@@ -31,7 +32,9 @@ export default function BlogPostCard({
           <Card.Title>
             <Link href={postLink}>{title}</Link>
           </Card.Title>
-          <Card.Text>{summary}</Card.Text>
+          <Card.Text>
+            <UserProfileLink user={author} />
+          </Card.Text>
           <Card.Text className="text-muted small">
             <time dateTime={createdAt}>{formatDate(createdAt)}</time>
           </Card.Text>
