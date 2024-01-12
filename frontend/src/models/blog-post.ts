@@ -1,3 +1,5 @@
+import { User } from './user';
+
 export interface BlogPost {
   _id: string;
   slug: string;
@@ -7,4 +9,5 @@ export interface BlogPost {
   featuredImageUrl: string;
   createdAt: string;
   updatedAt: string;
+  author: User;
 }
