@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Container, Nav, Navbar } from 'react-bootstrap';
+import { Button, Container, Nav, NavDropdown, Navbar } from 'react-bootstrap';
 import { FiEdit } from 'react-icons/fi';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 import Logo from '@/assets/images/logo-bn.svg';
@@ -9,6 +9,9 @@ import styles from '@/styles/NavBar.module.css';
 import { useState } from 'react';
 import LoginModal from './auth/LoginModal';
 import SignupModal from './auth/SignupModal';
+import { User } from '@/models/user';
+import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
+import * as UsersApi from '@/network/api/users';
 
 export default function NavBar() {
   const router = useRouter();
@@ -55,24 +58,70 @@ export default function NavBar() {
               Blog
             </Nav.Link>
           </Nav>
-          {user ? <LoggedInView /> : <LoggedOutView />}
+          {user ? <LoggedInView user={user} /> : <LoggedOutView />}
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 }
 
-function LoggedInView() {
+interface LoggedInViewProps {
+  user: User;
+}
+
+// opting to pass user as a prop instead of using the useAuthenticatedUser() hook , which can return null
+function LoggedInView({ user }: LoggedInViewProps) {
+  const { userMutate } = useAuthenticatedUser();
+
+  async function logout() {
+    try {
+      await UsersApi.logout();
+      userMutate(null);
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
+
   return (
     <Nav className="ms-auto">
       <Nav.Link
-        className="d-flex align-items-center gap-1"
+        className="d-flex align-items-center gap-1 link-primary"
         as={Link}
         href="/blog/new-post"
       >
         <FiEdit />
         Create Post{' '}
       </Nav.Link>
+      <Navbar.Text className="ms-md-3">Hi {user.displayName || 'User'}! </Navbar.Text>
+      <NavDropdown
+        className={styles.accountDropdown}
+        title={
+          <Image
+            className="rounded-circle"
+            src={user.profilePicUrl || profilePicPlaceholder}
+            width={40}
+            height={40}
+            alt="user profile picture"
+          />
+        }
+      >
+        <NavDropdown.Item>
+          {user.username && (
+            <>
+              <Nav.Link
+                className="p-0"
+                as={Link}
+                href={`/user/${user.username}`}
+              >
+                My Profile
+              </Nav.Link>
+              <NavDropdown.Divider />
+            </>
+          )}
+        </NavDropdown.Item>
+        <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+      </NavDropdown>
     </Nav>
   );
 }
