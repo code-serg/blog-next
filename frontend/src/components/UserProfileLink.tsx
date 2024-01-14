@@ -3,7 +3,6 @@ import Image from 'next/image';
 import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
 import Link from 'next/link';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { format } from 'path';
 import { formatDate } from '@/utils/utils';
 
 interface UserProfileLinkProps {
@@ -20,7 +19,7 @@ export default function UserProfileLink({ user }: UserProfileLinkProps) {
       }
       delay={{ show: 500, hide: 0 }}
     >
-      <span>
+      <span className="d-flex align-items-center w-fit-content">
         <Image
           src={user.profilePicUrl || profilePicPlaceholder}
           alt={'Profile Picture: ' + user.displayName}
