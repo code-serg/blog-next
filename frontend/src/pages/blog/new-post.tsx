@@ -1,22 +1,24 @@
 import { Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as BlogApi from '@/network/api/blog';
 import FormInputField from '@/components/form/FormInputField';
 import MarkdownEditor from '@/components/form/MarkdownEditor';
 import { generateSlug } from '@/utils/utils';
 import LoadingButton from '@/components/LoadingButton';
+import { slugSchema, requiredFileSchema, requiredStringSchema } from '@/utils/validation';
 
-interface CreatePostFromData {
-  title: string;
-  slug: string;
-  summary: string;
-  body: string;
-  // 'featureImage' must match as defined in backend routes/blog-posts.ts
-  // react-hooks-form uses 'FileList' for file input.
-  // backend uses File for type, so pass featuredImage[0] to createBlogPost
-  featuredImage: FileList;
-}
+const validationSchema = yup.object({
+  title: requiredStringSchema,
+  slug: slugSchema.required('Required'),
+  summary: requiredStringSchema,
+  body: requiredStringSchema,
+  featuredImage: requiredFileSchema,
+});
+
+type CreatePostFromData = yup.InferType<typeof validationSchema>;
 
 export default function CreateBlogPostPage() {
   const router = useRouter();
@@ -28,7 +30,9 @@ export default function CreateBlogPostPage() {
     watch,
     getValues,
     formState: { errors, isSubmitting },
-  } = useForm<CreatePostFromData>();
+  } = useForm<CreatePostFromData>({
+    resolver: yupResolver(validationSchema),
+  });
 
   async function onSubmit({ title, slug, summary, body, featuredImage }: CreatePostFromData) {
     try {
@@ -54,7 +58,7 @@ export default function CreateBlogPostPage() {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormInputField
           label="Post Title"
-          register={register('title', { required: 'Required' })}
+          register={register('title')}
           placeholder="Enter Post Title"
           maxLength={105}
           error={errors.title}
@@ -62,14 +66,14 @@ export default function CreateBlogPostPage() {
         />
         <FormInputField
           label="Post Slug"
-          register={register('slug', { required: 'Required' })}
+          register={register('slug')}
           placeholder="Enter Post Slug"
           maxLength={105}
           error={errors.slug}
         />
         <FormInputField
           label="Post Summary"
-          register={register('summary', { required: 'Required' })}
+          register={register('summary')}
           placeholder="Enter Post Summary"
           maxLength={300}
           as="textarea"
@@ -77,14 +81,14 @@ export default function CreateBlogPostPage() {
         />
         <FormInputField
           label="Post Image"
-          register={register('featuredImage', { required: 'Required' })}
+          register={register('featuredImage')}
           type="file"
           accept="image/png, image/jpeg"
           error={errors.featuredImage}
         />
         <MarkdownEditor
           label="Post Body"
-          register={register('body', { required: 'Required' })}
+          register={register('body')}
           setValue={setValue}
           watch={watch}
           error={errors.body}

@@ -1,18 +1,24 @@
 import { useState } from 'react';
 import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import * as UsersApi from '@/network/api/users';
 import FormInputField from '../form/FormInputField';
 import PasswordInputField from '../form/PasswordInputField';
 import LoadingButton from '../LoadingButton';
 import { BadRequestError, ConflictError } from '@/network/http-errors';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
+import { usernameSchema, emailSchema, passwordSchema } from '@/utils/validation';
 
-interface SignupFormData {
-  username: string;
-  email: string;
-  password: string;
-}
+const validationSchema = yup.object({
+  username: usernameSchema.required('Required'),
+  email: emailSchema.required('Required'),
+  password: passwordSchema.required('Required'),
+});
+
+type SignupFormData = yup.InferType<typeof validationSchema>;
 
 interface SignupModalProps {
   onDismiss: () => void;
@@ -28,7 +34,9 @@ export default function SignupModal({ onDismiss, onLoginInstead }: SignupModalPr
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignupFormData>();
+  } = useForm<SignupFormData>({
+    resolver: yupResolver(validationSchema),
+  });
 
   async function onSubmit(credentials: SignupFormData) {
     try {
