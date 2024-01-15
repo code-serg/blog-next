@@ -10,10 +10,11 @@ import LoadingButton from '../LoadingButton';
 import PasswordInputField from '../form/PasswordInputField';
 import { UnauthorizedError } from '@/network/http-errors';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
+import { requiredStringSchema } from '@/utils/validation';
 
 const validationSchema = yup.object({
-  username: yup.string().required('Username is required'),
-  password: yup.string().required('Password is required'),
+  username: requiredStringSchema,
+  password: requiredStringSchema,
 });
 
 type LoginFormData = yup.InferType<typeof validationSchema>;
