@@ -14,3 +14,12 @@ export const passwordSchema = yup
   .string()
   .matches(/^(?!.* )/, 'Must not contain spaces')
   .min(6, 'Must be at least 6 characters');
+
+export const slugSchema = yup
+  .string()
+  .matches(/^[a-zA-Z0-9_-]*$/, 'Must only contain alphanumeric characters, underscores, and dashes');
+
+export const requiredFileSchema = yup
+  .mixed<FileList>()
+  .test('not-empty-file-list', 'Required', (value) => value instanceof FileList && value.length > 0)
+  .required();
