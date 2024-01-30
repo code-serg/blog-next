@@ -12,6 +12,8 @@ const blogPostBodySchema = yup.object({
   body: yup.string().required(),
 });
 
+export type BlogPostBody = yup.InferType<typeof blogPostBodySchema>;
+
 export const createBlogPostSchema = yup.object({
   body: blogPostBodySchema,
   file: imageFileSchema.required('Featured image is required'),

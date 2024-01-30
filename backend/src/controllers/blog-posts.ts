@@ -5,6 +5,7 @@ import BlogPostModel from '../models/blog-post';
 import assertIsDefined from '../utils/assertIsDefined';
 import env from '../env';
 import createHttpError from 'http-errors';
+import { BlogPostBody } from '../validation/blog-post';
 
 // using const instead of function - this syntax allows for defining the type - then req, res, next are automatically typed
 // function can be used, but then req, res, and next type must be indivually defined
@@ -43,13 +44,6 @@ export const getBlogPostBySlug: RequestHandler<{ slug: string }> = async (req, r
     next(error);
   }
 };
-
-interface BlogPostBody {
-  slug: string;
-  title: string;
-  summary: string;
-  body: string;
-}
 
 // RequestHandler type parameters:
 // 1. Params: URL parameters type. Set to `unknown` since we aren't expecting any specific parameters.
