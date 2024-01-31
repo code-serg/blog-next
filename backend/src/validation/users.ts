@@ -1,4 +1,3 @@
-import e from 'express';
 import * as yup from 'yup';
 
 const usernameSchema = yup
