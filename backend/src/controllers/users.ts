@@ -70,3 +70,17 @@ export const logout: RequestHandler = (req, res) => {
     res.sendStatus(200);
   });
 };
+
+export const getUserByUsername: RequestHandler = async (req, res, next) => {
+  try {
+    const user = await UserModel.findOne({ username: req.params.username }).exec();
+
+    if (!user) {
+      throw createHttpError(404, 'User not found');
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
