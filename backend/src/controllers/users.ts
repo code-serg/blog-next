@@ -3,14 +3,11 @@ import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 import UserModel from '../models/user';
 import assertIsDefined from '../utils/assertIsDefined';
+import { SignupBody, UpdateUserBody } from '../validation/users';
+import sharp from 'sharp';
+import env from '../env';
 
-interface SignUpBody {
-  username: string;
-  password: string;
-  email: string;
-}
-
-export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = async (req, res, next) => {
+export const signUp: RequestHandler<unknown, unknown, SignupBody, unknown> = async (req, res, next) => {
   const { username, email, password: passwordRaw } = req.body;
   try {
     const existingUsername = await UserModel.findOne({ username })
@@ -80,6 +77,59 @@ export const getUserByUsername: RequestHandler = async (req, res, next) => {
     }
 
     res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateUser: RequestHandler<unknown, unknown, UpdateUserBody, unknown> = async (
+  req,
+  res,
+  next
+) => {
+  const { username, displayName, about } = req.body;
+  const profileImage = req.file;
+  const authenticatedUser = req.user;
+
+  try {
+    assertIsDefined(authenticatedUser);
+
+    if (username) {
+      const existingUsername = await UserModel.findOne({ username })
+        .collation({ locale: 'en', strength: 1 })
+        .exec();
+
+      if (existingUsername) {
+        throw createHttpError(409, 'Username already exists');
+      }
+    }
+
+    let profileImageDestinationPath: string | undefined = undefined;
+
+    if (profileImage) {
+      // path/filename is always the same for the user, thus overwriting the previous image is automatically handled
+      profileImageDestinationPath = '/uploads/profile-images/' + authenticatedUser._id + '.png';
+
+      await sharp(profileImage.buffer)
+        .resize(500, 500, { withoutEnlargement: true })
+        .toFile('./' + profileImageDestinationPath);
+    }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      authenticatedUser._id,
+      {
+        // only update the fields that are present in the request body
+        $set: {
+          ...(username && { username }),
+          ...(displayName && { displayName }),
+          ...(about && { about }),
+          ...(profileImage && { profilePicUrl: env.SERVER_URL + profileImageDestinationPath }),
+        },
+      },
+      { new: true }
+    ).exec();
+
+    res.status(200).json(updatedUser);
   } catch (error) {
     next(error);
   }
