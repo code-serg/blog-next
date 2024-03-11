@@ -10,8 +10,12 @@ import { BlogPostBody } from '../validation/blog-post';
 // using const instead of function - this syntax allows for defining the type - then req, res, next are automatically typed
 // function can be used, but then req, res, and next type must be indivually defined
 export const getBlogPosts: RequestHandler = async (req, res, next) => {
+  const authorId = req.query.authorId;
+
+  const filter = authorId ? { author: authorId } : {};
+
   try {
-    const allBlogPosts = await BlogPostModel.find().sort({ _id: -1 }).populate('author').exec();
+    const allBlogPosts = await BlogPostModel.find(filter).sort({ _id: -1 }).populate('author').exec();
 
     res.status(200).json(allBlogPosts);
   } catch (error) {
