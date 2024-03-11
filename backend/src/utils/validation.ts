@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { validateBufferMIMEType } from 'validate-image-type';
 import * as yup from 'yup';
 
@@ -12,3 +13,11 @@ export const imageFileSchema = yup
 
     return result.ok;
   });
+
+export const objectIdSchema = yup
+  .string()
+  .test(
+    'is-valid-object-id',
+    '${path} is not a valid object id',
+    (value) => !value || mongoose.Types.ObjectId.isValid(value)
+  );
