@@ -3,11 +3,11 @@ import * as BlogPostController from '../controllers/blog-posts';
 import { featuredImageUpload } from '../middleware/image-upload';
 import requiresAuth from '../middleware/requiresAuth';
 import validateRequestSchema from '../middleware/validareRequestSchema';
-import { createBlogPostSchema } from '../validation/blog-post';
+import { createBlogPostSchema, getBlogPostSchema } from '../validation/blog-post';
 
 const router = express.Router();
 
-router.get('/', BlogPostController.getBlogPosts);
+router.get('/', validateRequestSchema(getBlogPostSchema), BlogPostController.getBlogPosts);
 
 router.get('/slugs', BlogPostController.getAllBlogPostSlugs);
 
