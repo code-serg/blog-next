@@ -5,11 +5,15 @@ import BlogPostModel from '../models/blog-post';
 import assertIsDefined from '../utils/assertIsDefined';
 import env from '../env';
 import createHttpError from 'http-errors';
-import { BlogPostBody } from '../validation/blog-post';
+import { BlogPostBody, GetBlogPostQuery } from '../validation/blog-post';
 
 // using const instead of function - this syntax allows for defining the type - then req, res, next are automatically typed
 // function can be used, but then req, res, and next type must be indivually defined
-export const getBlogPosts: RequestHandler = async (req, res, next) => {
+export const getBlogPosts: RequestHandler<unknown, unknown, unknown, GetBlogPostQuery> = async (
+  req,
+  res,
+  next
+) => {
   const authorId = req.query.authorId;
 
   const filter = authorId ? { author: authorId } : {};
