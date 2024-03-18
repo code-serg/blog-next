@@ -8,6 +8,12 @@ export async function getBlogPosts() {
   const response = await api.get<BlogPost[]>('/posts');
   return response.data;
 }
+
+export async function getBlogPostsByUser(userId: string) {
+  const response = await api.get<BlogPost[]>(`/posts?authorId=${userId}`);
+  return response.data;
+}
+
 export async function getAllBlogPostSlugs() {
   // Sending a GET request to the '/posts/slugs' endpoint.
   // The expected response data is an array of strings.
