@@ -28,7 +28,7 @@ export async function getAuthenticatedUser() {
 }
 
 export async function getUserByUsername(username: string) {
-  const response = await api.get<User>(`/users/profile/:${username}`);
+  const response = await api.get<User>(`/users/profile/${username}`);
   return response.data;
 }
 
