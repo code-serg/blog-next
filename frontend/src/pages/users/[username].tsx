@@ -3,6 +3,10 @@ import { GetServerSideProps } from 'next';
 import * as UsersApi from '@/network/api/users';
 import { useState } from 'react';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
+import Head from 'next/head';
+import { Col, Row } from 'react-bootstrap';
+import Image from 'next/image';
+import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
 
 // typescript interface for the props object
 interface UserProfilePageProps {
@@ -13,11 +17,32 @@ export const getServerSideProps: GetServerSideProps<UserProfilePageProps> = asyn
   const username = params?.username?.toString();
   if (!username) throw Error('Missing username');
 
-  console.log('username:', username);
   const user = await UsersApi.getUserByUsername(username);
 
   return { props: { user } };
 };
+
+interface UserInfoSectionProps {
+  user: User;
+}
+
+function UserInfoSection({
+  user: { username, displayName, profilePicUrl, about, createdAt },
+}: UserInfoSectionProps) {
+  return (
+    <Row>
+      <Col>
+        <Image
+          src={profilePicUrl || profilePicPlaceholder}
+          alt={'Profile picture for: ' + username}
+          width={200}
+          height={200}
+          priority
+        />
+      </Col>
+    </Row>
+  );
+}
 
 export default function UserProfilePage({ user }: UserProfilePageProps) {
   const { user: loggedInUser, userMutate: mutateLoggedInUser } = useAuthenticatedUser();
@@ -29,9 +54,13 @@ export default function UserProfilePage({ user }: UserProfilePageProps) {
   const profileUserIsLoggedInUser = (loggedInUser && loggedInUser._id === profileUser._id) || false;
 
   return (
-    <div>
-      <h1>User Profile</h1>
-      <h2>{profileUser.username}</h2>
-    </div>
+    <>
+      <Head>
+        <title>{`${profileUser.username} - Next Blog`}</title>
+      </Head>
+      <div>
+        <UserInfoSection user={profileUser} />
+      </div>
+    </>
   );
 }
