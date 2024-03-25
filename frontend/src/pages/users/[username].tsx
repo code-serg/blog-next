@@ -7,6 +7,7 @@ import Head from 'next/head';
 import { Col, Row } from 'react-bootstrap';
 import Image from 'next/image';
 import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
+import styles from '@/styles/UserProfilePage.module.css';
 
 // typescript interface for the props object
 interface UserProfilePageProps {
@@ -31,14 +32,25 @@ function UserInfoSection({
 }: UserInfoSectionProps) {
   return (
     <Row>
-      <Col>
+      <Col sm="auto">
         <Image
           src={profilePicUrl || profilePicPlaceholder}
           alt={'Profile picture for: ' + username}
           width={200}
           height={200}
           priority
+          className={styles.profileImage}
         />
+      </Col>
+      <Col className="mt-2 mt-sm-0">
+        <h1>{displayName || username}</h1>
+        <div>
+          User: <strong>{username} </strong>
+        </div>
+        <div>
+          Joined: <strong>{new Date(createdAt).toDateString()}</strong>
+        </div>
+        <div>{about}</div>
       </Col>
     </Row>
   );
